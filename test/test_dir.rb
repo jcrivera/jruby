@@ -154,6 +154,14 @@ class TestDir < Test::Unit::TestCase
     assert_equal ["#{jar_file}/abc"], Dir["#{jar_file}/abc"]
   end
 
+  # JRUBY-321
+  def test_glob_inside_jar_file_with_parent_traversal
+    jar_file = File.expand_path('../jruby-321.jar', __FILE__)
+    puts ">>> #{jar_file}"
+    aref = Dir["file:#{jar_file}!/a/b/c/../*"]
+    assert aref.include? "file:#{jar_file}!/a/b/fileb"
+  end
+
   # JRUBY-5155
   def test_glob_with_magic_inside_jar_file
     jar_file = jar_file_with_spaces

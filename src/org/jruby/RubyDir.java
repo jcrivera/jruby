@@ -300,7 +300,13 @@ public class RubyDir extends RubyObject {
             }
         }
         sb.append("$");
-        return sb.toString().replace("[^/]*[^/]*/", ".*").replace("[^/]*[^/]*", ".*");
+        String result = sb.toString().replace("[^/]*[^/]*/", ".*").replace("[^/]*[^/]*", ".*");
+        String parentDirRegex = "[/^][^/]*(?<!/\\\\.\\\\.)/\\\\.\\\\./";
+        Pattern pattern = Pattern.compile(parentDirRegex);
+        while (pattern.matcher(result).find() ) {
+            result = result.replaceAll(parentDirRegex, "/");
+        }
+        return result;
     }
     
     /**
