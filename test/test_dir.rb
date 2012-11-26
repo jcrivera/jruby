@@ -157,9 +157,10 @@ class TestDir < Test::Unit::TestCase
   # JRUBY-321
   def test_glob_inside_jar_file_with_parent_traversal
     jar_file = File.expand_path('../jruby-321.jar', __FILE__)
-    puts ">>> #{jar_file}"
     aref = Dir["file:#{jar_file}!/a/b/c/../*"]
     assert aref.include? "file:#{jar_file}!/a/b/fileb"
+    aref = Dir["file:#{jar_file}!/a/b/c/../../filea"]
+    assert aref.include? "file:#{jar_file}!/a/filea"
   end
 
   # JRUBY-5155

@@ -305,6 +305,9 @@ public class RubyDir extends RubyObject {
         }
         sb.append("$");
         String result = sb.toString().replace("[^/]*[^/]*/", ".*").replace("[^/]*[^/]*", ".*");
+
+        // collapse "a/b/../" to "a/" until there are no more, taking care not 
+        // to collapse "../../" into "/"
         String parentDirRegex = "[/^][^/]*(?<!/\\\\.\\\\.)/\\\\.\\\\./";
         Pattern pattern = Pattern.compile(parentDirRegex);
         while (pattern.matcher(result).find() ) {
