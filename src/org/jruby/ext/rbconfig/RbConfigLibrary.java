@@ -195,6 +195,10 @@ public class RbConfigLibrary implements Library {
     public static String getSiteArchDir(Ruby runtime) {
         return getSiteDir(runtime);
     }
+    
+    public static String getSysConfDir(Ruby runtime) {
+        return new NormalizedFile(getNormalizedHome(runtime), "etc").getPath();
+    }
 
     /**
      * Just enough configuration settings (most don't make sense in Java) to run the rubytests
@@ -288,6 +292,7 @@ public class RbConfigLibrary implements Library {
         String siteDir = getSiteDir(runtime);
         String siteLibDir = getSiteLibDir(runtime);
         String siteArchDir = getSiteArchDir(runtime);
+        String sysConfDir = getSysConfDir(runtime);
 
         setConfig(configHash, "libdir", vendorDirGeneral);
         if (runtime.is1_9()) setConfig(configHash, "rubylibprefix", vendorDirGeneral + "/ruby");
@@ -308,7 +313,7 @@ public class RbConfigLibrary implements Library {
         setConfig(configHash, "configure_args", "");
         setConfig(configHash, "datadir", shareDir);
         setConfig(configHash, "mandir", new NormalizedFile(normalizedHome, "man").getPath());
-        setConfig(configHash, "sysconfdir", new NormalizedFile(normalizedHome, "etc").getPath());
+        setConfig(configHash, "sysconfdir", sysConfDir);
         setConfig(configHash, "localstatedir", new NormalizedFile(normalizedHome, "var").getPath());
         setConfig(configHash, "DLEXT", "jar");
         if (getRubygemsDir(runtime) != null) {
@@ -355,7 +360,7 @@ public class RbConfigLibrary implements Library {
         setConfig(mkmfHash, "configure_args", "");
         setConfig(mkmfHash, "datadir", new NormalizedFile(normalizedHome, "share").getPath());
         setConfig(mkmfHash, "mandir", new NormalizedFile(normalizedHome, "man").getPath());
-        setConfig(mkmfHash, "sysconfdir", new NormalizedFile(normalizedHome, "etc").getPath());
+        setConfig(mkmfHash, "sysconfdir", sysConfDir);
         setConfig(mkmfHash, "localstatedir", new NormalizedFile(normalizedHome, "var").getPath());
         if (getRubygemsDir(runtime) != null) {
             setConfig(mkmfHash, "rubygemsdir", new NormalizedFile(getRubygemsDir(runtime)).getPath());
